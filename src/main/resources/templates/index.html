@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+	<title>Home</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" th:href="@{/resources/table_style/main.css}">
+</head>
+<style>
+	div{
+		position: relative;
+		left: 400px;
+	}
+	input{
+		width: 400px;
+		height: 10px;
+		padding: 20px;
+		border: 2px solid #1F2739;
+		border-radius: 5px;
+	}
+	textarea{
+		width: 400px;
+		height: 50px;
+		padding: 20px;
+		border: 2px solid #1F2739;
+		border-radius: 5px;
+	}
+	#button{
+		position: relative;
+		left: 20px;
+	}
+</style>
+<body>
+<table class="container">
+	<thead>
+	<tr>
+		<th><h1 style="color: limegreen">Id</h1></th>
+		<th><h1 style="color: limegreen">Title</h1></th>
+		<th><h1 style="color: limegreen">Description</h1></th>
+		<th><h1 style="color: limegreen">$ Price</h1></th>
+		<th><h1 style="color: #FFF842">Author id</h1></th>
+		<th><h1 style="color: #FFF842">Author name</h1></th>
+		<th><h1 style="color: #FFF842">Author surname</h1></th>
+		<th><h1 style="color: red">Update</h1></th>
+		<th><h1 style="color: red">Delete</h1></th>
+	</tr>
+	</thead>
+	<tbody>
+	<th:block th:each="book : ${books}" th:object="${book}">
+		<tr>
+			<td style="color: limegreen" th:text="*{id}">id</td>
+			<td style="color: limegreen" th:text="*{title}">title</td>
+			<td style="color: limegreen" th:text="*{description}">description</td>
+			<td style="color: limegreen" th:text="'$' + *{price}">price</td>
+			<td style="color: #FFF842" th:text="*{author.id}">author id</td>
+			<td style="color: #FFF842" th:text="*{author.name}">author name</td>
+			<td style="color: #FFF842" th:text="*{author.surname}">author surname</td>
+			<td>
+				<a style="color: red" th:href="@{/book/{id}(id = *{id})}">Update</a>
+			</td>
+			<td>
+				<a style="color: red" th:href="@{/book/delete/{id}(id = *{id})}">Delete</a>
+			</td>
+		</tr>
+	</th:block>
+
+	</tbody>
+</table>
+<div>
+	<form th:unless="${#strings.equals(#request.getRequestURI(),'/')}" th:action="@{/book/update}" method="post" th:object="${book}">
+		<input th:unless="${#strings.equals(#request.getRequestURI(),'/')}" type="hidden" th:field="*{id}" th:value="*{id}" >
+		<input th:unless="${#strings.equals(#request.getRequestURI(),'/')}" type="hidden" th:field="*{author.id}" th:value="*{author.id}" >
+		<input type="text" th:field="*{title}" placeholder="Title..."><br/><br/>
+		<textarea th:field="*{description}" placeholder="description..."></textarea><br/><br/>
+		<input type="text" th:field="*{price}" placeholder="$ price..."><br/><br/>
+		<input type="text" th:field="*{author.name}" placeholder="Author name..."><br/><br/>
+		<input type="text" th:field="*{author.surname}" placeholder="Author surname..."><br/><br/>
+		<input type="submit" id="button" value="add">
+	</form>
+	<form th:if="${#strings.equals(#request.getRequestURI(),'/')}" th:action="@{/book/add}" method="post" th:object="${book}">
+		<input type="text" th:field="*{title}" placeholder="Title..."><br/><br/>
+		<textarea th:field="*{description}" placeholder="description..."></textarea><br/><br/>
+		<input type="text" th:field="*{price}" placeholder="$ price..."><br/><br/>
+		<input type="text" th:field="*{author.name}" placeholder="Author name..."><br/><br/>
+		<input type="text" th:field="*{author.surname}" placeholder="Author surname..."><br/><br/>
+		<input type="submit" id="button" value="add">
+	</form>
+</div>
+</body>
+</html>
